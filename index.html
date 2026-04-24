@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmad Bhai Video Downloader</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #8646B4;
+            --glass: rgba(255, 255, 255, 0.08);
+            --text: #f1f5f9;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 420px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { color: var(--accent); margin-bottom: 5px; font-size: 1.8rem; text-shadow: 0 0 15px rgba(134, 70, 180, 0.4); }
+        .sub-text { font-size: 0.85rem; opacity: 0.7; margin-bottom: 25px; letter-spacing: 1px; }
+
+        .input-box {
+            width: 100%;
+            padding: 18px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .input-box:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(134, 70, 180, 0.3); }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #8646B4, #5E177D);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--accent); }
+
+        #status {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+            background: rgba(255,255,255,0.05);
+            animation: fadeIn 0.4s;
+        }
+
+        .loader {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--glass);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        #result-box {
+            display: none;
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.07);
+            padding: 20px;
+            border-radius: 20px;
+            animation: zoomIn 0.5s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .selector-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .dl-option {
+            flex: 1;
+            padding: 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dl-option.audio { background: #3b82f6; }
+        .dl-option:hover { filter: brightness(1.2); transform: scale(1.05); }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        #installBtn {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #installBtn:hover { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ahmad Bhai Downloader</h2>
+    <p class="sub-text">PREMIUM PORTAL</p>
+    
+    <input type="text" id="videoUrl" class="input-box" placeholder="Paste link here...">
+    <button class="btn" onclick="fetchMedia()">Fetch Media 🚀</button>
+
+    <div class="loader" id="loader"></div>
+    <div id="status"></div>
+
+    <div id="result-box">
+        <div id="videoTitle" style="font-size: 0.9rem; margin-bottom: 15px; color: #cbd5e1;"></div>
+        <div class="selector-group">
+            <button class="dl-option" onclick="downloadFile('video')">🎬 Video</button>
+            <button class="dl-option audio" onclick="downloadFile('audio')">🎵 Audio</button>
+        </div>
+    </div>
+
+    <button id="installBtn">Install App 📲</button>
+</div>
+
+<script>
+    let mediaData = null;
+
+    // AUTO-FETCH LOGIC FROM BOT
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const botUrl = params.get('url');
+        if (botUrl) {
+            document.getElementById('videoUrl').value = decodeURIComponent(botUrl);
+            fetchMedia();
+        }
+    };
+
+    function showStatus(msg, color = "#8646B4") {
+        const s = document.getElementById('status');
+        s.innerText = msg;
+        s.style.display = 'block';
+        s.style.color = color;
+    }
+
+    async function fetchMedia() {
+        const url = document.getElementById('videoUrl').value;
+        if (!url) return showStatus("Please paste a link!", "#ef4444");
+
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('result-box').style.display = 'none';
+        showStatus("Loading... ");
+
+        try {
+            const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+            const json = await res.json();
+            document.getElementById('loader').style.display = 'none';
+
+            if (json.code === 0) {
+                mediaData = json.data;
+                document.getElementById('videoTitle').innerText = mediaData.title || "Ready to download!";
+                document.getElementById('result-box').style.display = 'block';
+                showStatus("Select Format Below ");
+            } else {
+                showStatus("Link not supported or private.", "#ef4444");
+            }
+        } catch (e) {
+            document.getElementById('loader').style.display = 'none';
+            showStatus("Server error. Try again.", "#ef4444");
+        }
+    }
+
+    async function downloadFile(type) {
+        let fileUrl = type === 'video' ? (mediaData.play || mediaData.wmplay) : mediaData.music;
+        if (!fileUrl.startsWith('http')) fileUrl = "https://www.tikwm.com" + fileUrl;
+
+        showStatus(`Starting ${type} download... `, "#3b82f6");
+        
+        try {
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = type === 'video' ? `AhmadBhai_Video.mp4` : `AhmadBhai_Audio.mp3`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            showStatus("Download Finished!", "#10b981");
+        } catch (e) {
+            showStatus("Direct download failed. Try again.", "#ef4444");
+        }
+    }
+
+    // PWA Logic for Install
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); deferredPrompt = e;
+        document.getElementById('installBtn').style.display = 'inline-block';
+    });
+    document.getElementById('installBtn').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') document.getElementById('installBtn').style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>
