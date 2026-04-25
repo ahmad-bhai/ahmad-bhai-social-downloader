@@ -1,7 +1,7 @@
 {
   "name": "Ahmad Bhai Video Downloader",
-  "short_name": "Ahmad Bhai",
-  "description": "Premium Video and Audio Downloader by Ahmad Bhai",
+  "short_name": "Ahmad Bhai Video Downloader",
+  "description": "Premium Video and Audio Downloader by Ahmad Bhai Video Downloader",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0f172a",
