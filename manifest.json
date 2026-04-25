@@ -1,6 +1,6 @@
 {
   "name": "Ahmad Bhai Video Downloader",
-  "short_name": "Ahmad Bhai Video Downloader",
+  "short_name": "Ahmad Bhai",
   "description": "Premium Video and Audio Downloader by Ahmad Bhai",
   "start_url": "index.html",
   "display": "standalone",
@@ -17,5 +17,14 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "share_target": {
+    "action": "index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }
