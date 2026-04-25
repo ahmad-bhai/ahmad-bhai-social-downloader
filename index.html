@@ -192,6 +192,25 @@
 
 <script>
     let mediaData = null;
+    // --- SHARE TARGET SYSTEM START ---
+window.addEventListener('DOMContentLoaded', () => {
+    const parsedUrl = new URL(window.location);
+    // Jab koi bahar se share karega toh link 'url' ya 'text' parameter mein hota hai
+    const sharedUrl = parsedUrl.searchParams.get('url') || parsedUrl.searchParams.get('text');
+    
+    if (sharedUrl) {
+        // Shared text mein se sirf link nikalne ke liye logic
+        const urlMatch = sharedUrl.match(/\bhttps?:\/\/\S+/gi);
+        if (urlMatch) {
+            const finalUrl = urlMatch[0];
+            document.getElementById('videoUrl').value = finalUrl;
+            // Foran fetch shuru kar do
+            fetchMedia();
+        }
+    }
+});
+// --- SHARE TARGET SYSTEM END ---
+
 
     // AUTO-FETCH LOGIC FROM BOT
     window.onload = function() {
