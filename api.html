@@ -3,127 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmad Bhai - API Cloud</title>
+    <title>Ahmad Bhai - API Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --neon: #ff0055; --cyan: #00d2ff; --bg: #05070a; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron', sans-serif; }
-        body { background: var(--bg); color: white; min-height: 100vh; padding: 20px; background-image: radial-gradient(circle at top right, #1a0b10, transparent); }
+        :root { --accent: #8646B4; --glass: rgba(255, 255, 255, 0.08); --text: #f1f5f9; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #0f172a); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+
+        .container { width: 90%; max-width: 420px; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 30px; text-align: center; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6); box-sizing: border-box; }
         
-        .container { max-width: 900px; margin: auto; }
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
-            padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        h2 { color: var(--accent); margin-bottom: 5px; font-size: 1.6rem; text-shadow: 0 0 15px rgba(134, 70, 180, 0.4); }
+        .sub-text { font-size: 0.75rem; opacity: 0.6; margin-bottom: 25px; letter-spacing: 2px; }
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 28px; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
-
-        .key-section { display: flex; gap: 10px; margin-top: 20px; }
-        input { 
-            flex: 1; background: #111; border: 1px solid #333; color: white; 
-            padding: 15px; border-radius: 10px; outline: none; font-family: monospace;
-        }
-
-        .btn { 
-            padding: 15px 25px; border-radius: 10px; border: none; font-weight: bold; 
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
-        }
-        .btn-gen { background: var(--cyan); color: #000; }
-        .btn-del { background: var(--neon); color: white; display: none; }
-
-        .docs { background: #000; padding: 20px; border-radius: 10px; border-left: 4px solid var(--cyan); margin-top: 20px; position: relative; }
-        .copy-icon { position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--cyan); }
-        code { color: #00ffaa; word-break: break-all; font-size: 14px; }
+        .api-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; position: relative; }
+        .label { font-size: 10px; color: var(--accent); text-align: left; display: block; margin-bottom: 5px; font-weight: bold; }
         
-        .limit-info { font-size: 12px; color: #777; margin-top: 10px; }
+        .row { display: flex; gap: 8px; align-items: center; }
+        .input-box { flex: 1; background: transparent; border: none; color: #00ffaa; font-family: monospace; font-size: 0.85rem; outline: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .copy-btn { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 0.8rem; }
+        .copy-btn:hover { transform: scale(1.1); }
+
+        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(45deg, #8646B4, #5E177D); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-main:hover { box-shadow: 0 0 20px var(--accent); }
+        .btn-del { background: #ef4444; margin-top: 10px; font-size: 0.8rem; padding: 10px; display: none; }
+
+        .code-area { background: #000; padding: 10px; border-radius: 10px; font-size: 10px; text-align: left; margin-top: 15px; color: #94a3b8; border: 1px solid #222; max-height: 80px; overflow-y: auto; word-break: break-all; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1><i class="fa-solid fa-microchip"></i> AHMAD BHAI DEVELOPER API</h1>
-        <p style="color: #666; font-size: 13px;">Enterprise Level Downloader Bridge</p>
+    <h2>API Hub</h2>
+    <p class="sub-text">MAGIC SCRIPTS PORTAL</p>
+
+    <div class="api-box">
+        <span class="label">YOUR PRIVATE API KEY</span>
+        <div class="row">
+            <input type="text" id="keyVal" class="input-box" readonly placeholder="No Key Found">
+            <button class="copy-btn" onclick="copyIt('keyVal')"><i class="fa-solid fa-copy"></i></button>
+        </div>
     </div>
 
-    <div class="glass-card">
-        <h3><i class="fa-solid fa-key"></i> API Key Manager</h3>
-        <div class="key-section">
-            <input type="text" id="apiKeyDisplay" readonly placeholder="No Key Generated">
-            <button class="btn btn-gen" id="genBtn" onclick="manageKey('generate')"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button>
-            <button class="btn btn-del" id="delBtn" onclick="manageKey('delete')"><i class="fa-solid fa-trash"></i></button>
+    <div class="api-box">
+        <span class="label">ENDPOINT URL</span>
+        <div class="row">
+            <input type="text" id="apiLink" class="input-box" readonly placeholder="Generate key first">
+            <button class="copy-btn" onclick="copyIt('apiLink')"><i class="fa-solid fa-copy"></i></button>
         </div>
-        <p class="limit-info">* Max File Limit: 45MB | Status: <span style="color: #00ff00;">Stable</span></p>
     </div>
 
-    <div class="glass-card">
-        <h3><i class="fa-solid fa-book"></i> Endpoint Documentation</h3>
-        <p style="font-size: 14px; margin: 15px 0;">Use the following link structure in your bots or websites:</p>
-        
-        <div class="docs">
-            <i class="fa-solid fa-copy copy-icon" onclick="copyApi()"></i>
-            <code id="apiFormat">https://ahmad-downloader.vercel.app/api/download?key=[YOUR_KEY]&url=[LINK]</code>
-        </div>
+    <button class="btn-main" id="genBtn" onclick="action('gen')">🚀 GENERATE NEW KEY</button>
+    <button class="btn-main btn-del" id="delBtn" onclick="action('del')">🗑 DELETE KEY</button>
 
-        <h4 style="margin-top: 25px;">Sample Javascript Fetch:</h4>
-        <div class="docs">
-            <pre style="font-size: 12px; color: #94a3b8;">
-function downloadFile(targetUrl) {
-  const myKey = localStorage.getItem('ahmad_api_key');
-  const finalUrl = `https://your-site.vercel.app/api/download?key=${myKey}&url=${encodeURIComponent(targetUrl)}`;
-  window.location.href = finalUrl;
-}</pre>
-        </div>
+    <div class="code-area" id="codePrev">
+        // Documentation:<br>
+        GET /api/download?key={key}&url={url}
     </div>
 </div>
 
 <script>
-    // Load existing key
     window.onload = () => {
-        const savedKey = localStorage.getItem('ahmad_api_key');
-        if(savedKey) updateUI(savedKey);
+        const saved = localStorage.getItem('ahmad_key');
+        if(saved) refresh(saved);
     }
 
-    function manageKey(action) {
-        if(action === 'generate') {
+    function action(type) {
+        if(type === 'gen') {
             const newKey = 'AB-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            localStorage.setItem('ahmad_api_key', newKey);
-            updateUI(newKey);
-            alert("🚀 Key Generated Successfully!");
+            localStorage.setItem('ahmad_key', newKey);
+            refresh(newKey);
         } else {
-            if(confirm("Bhai, key delete kar dein? Aapka access band ho jayega.")){
-                localStorage.removeItem('ahmad_api_key');
-                updateUI(null);
+            if(confirm("Delete API access?")) {
+                localStorage.removeItem('ahmad_key');
+                refresh(null);
             }
         }
     }
 
-    function updateUI(key) {
-        const input = document.getElementById('apiKeyDisplay');
-        const genBtn = document.getElementById('genBtn');
-        const delBtn = document.getElementById('delBtn');
-        const apiFormat = document.getElementById('apiFormat');
-
-        if(key) {
-            input.value = key;
-            genBtn.style.display = 'none';
-            delBtn.style.display = 'flex';
-            apiFormat.innerText = `https://ahmad-downloader.vercel.app/api/download?key=${key}&url=YOUR_LINK_HERE`;
-        } else {
-            input.value = '';
-            genBtn.style.display = 'flex';
-            delBtn.style.display = 'none';
-            apiFormat.innerText = `https://ahmad-downloader.vercel.app/api/download?key=[YOUR_KEY]&url=[LINK]`;
-        }
+    function refresh(k) {
+        const urlBase = window.location.origin + "/api/download";
+        document.getElementById('keyVal').value = k || "";
+        document.getElementById('apiLink').value = k ? `${urlBase}?key=${k}&url=` : "";
+        document.getElementById('genBtn').style.display = k ? 'none' : 'block';
+        document.getElementById('delBtn').style.display = k ? 'block' : 'none';
+        document.getElementById('codePrev').innerText = k ? `Final Endpoint:\n${urlBase}?key=${k}&url=YOUR_URL` : "// Generate key to see endpoint";
     }
 
-    function copyApi() {
-        const text = document.getElementById('apiFormat').innerText;
-        navigator.clipboard.writeText(text);
-        alert("📋 API Link Copied!");
+    function copyIt(id) {
+        const val = document.getElementById(id).value;
+        if(!val) return;
+        navigator.clipboard.writeText(val);
+        const btn = document.querySelector(`#${id} + .copy-btn`);
+        btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+        setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy"></i>', 2000);
     }
 </script>
 
