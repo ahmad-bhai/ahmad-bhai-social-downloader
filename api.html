@@ -3,47 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmad Bhai - API Docs</title>
+    <title>Ahmad Bhai - API Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --neon: #00d2ff; --bg: #0f172a; }
-        body { background: var(--bg); color: white; font-family: sans-serif; padding: 40px; }
-        .code-block { background: #1e293b; padding: 20px; border-radius: 10px; border-left: 5px solid var(--neon); overflow-x: auto; }
-        .key-badge { background: var(--neon); color: black; padding: 2px 8px; border-radius: 5px; font-weight: bold; }
-        pre { color: #94a3b8; line-height: 1.5; }
+        :root { --neon: #ff0055; --cyan: #00d2ff; --bg: #05070a; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron', sans-serif; }
+        body { background: var(--bg); color: white; min-height: 100vh; padding: 20px; background-image: radial-gradient(circle at top right, #1a0b10, transparent); }
+        
+        .container { max-width: 900px; margin: auto; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+            padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 28px; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+
+        .key-section { display: flex; gap: 10px; margin-top: 20px; }
+        input { 
+            flex: 1; background: #111; border: 1px solid #333; color: white; 
+            padding: 15px; border-radius: 10px; outline: none; font-family: monospace;
+        }
+
+        .btn { 
+            padding: 15px 25px; border-radius: 10px; border: none; font-weight: bold; 
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-gen { background: var(--cyan); color: #000; }
+        .btn-del { background: var(--neon); color: white; display: none; }
+
+        .docs { background: #000; padding: 20px; border-radius: 10px; border-left: 4px solid var(--cyan); margin-top: 20px; position: relative; }
+        .copy-icon { position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--cyan); }
+        code { color: #00ffaa; word-break: break-all; font-size: 14px; }
+        
+        .limit-info { font-size: 12px; color: #777; margin-top: 10px; }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <h1>🚀 Ahmad Bhai Downloader API</h1>
-    <p>Apni website ya bot mein hamara downloader lagane ke liye niche wala system use karein.</p>
-    
-    <hr style="border: 0.1px solid #334155; margin: 20px 0;">
-
-    <h3>1. Aapki API Endpoint</h3>
-    <div class="code-block">
-        <code>https://ahmad-downloader.vercel.app/api/download?key=<span class="key-badge">YOUR_KEY</span>&url=VIDEO_URL</code>
+<div class="container">
+    <div class="header">
+        <h1><i class="fa-solid fa-microchip"></i> AHMAD BHAI DEVELOPER API</h1>
+        <p style="color: #666; font-size: 13px;">Enterprise Level Downloader Bridge</p>
     </div>
 
-    <h3>2. Copy-Paste Code (For Your Website)</h3>
-    <p>Ye HTML/JS code apni site par lagayein:</p>
-    
-    <div class="code-block">
-<pre>
-&lt;!-- User Side Downloader --&gt;
-&lt;input type="text" id="vUrl" placeholder="Paste Video Link"&gt;
-&lt;button onclick="magicDownload()"&gt;Download Now&lt;/button&gt;
-
-&lt;script&gt;
-function magicDownload() {
-    const url = document.getElementById('vUrl').value;
-    const apiKey = "GUEST_KEY_123"; // User ki apni key
-    const apiUrl = `https://ahmad-downloader.vercel.app/api/download?key=${apiKey}&url=${encodeURIComponent(url)}`;
-    
-    window.location.href = apiUrl; // Direct download start ho jayega
-}
-&lt;/script&gt;
-</pre>
+    <div class="glass-card">
+        <h3><i class="fa-solid fa-key"></i> API Key Manager</h3>
+        <div class="key-section">
+            <input type="text" id="apiKeyDisplay" readonly placeholder="No Key Generated">
+            <button class="btn btn-gen" id="genBtn" onclick="manageKey('generate')"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button>
+            <button class="btn btn-del" id="delBtn" onclick="manageKey('delete')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <p class="limit-info">* Max File Limit: 45MB | Status: <span style="color: #00ff00;">Stable</span></p>
     </div>
+
+    <div class="glass-card">
+        <h3><i class="fa-solid fa-book"></i> Endpoint Documentation</h3>
+        <p style="font-size: 14px; margin: 15px 0;">Use the following link structure in your bots or websites:</p>
+        
+        <div class="docs">
+            <i class="fa-solid fa-copy copy-icon" onclick="copyApi()"></i>
+            <code id="apiFormat">https://ahmad-downloader.vercel.app/api/download?key=[YOUR_KEY]&url=[LINK]</code>
+        </div>
+
+        <h4 style="margin-top: 25px;">Sample Javascript Fetch:</h4>
+        <div class="docs">
+            <pre style="font-size: 12px; color: #94a3b8;">
+function downloadFile(targetUrl) {
+  const myKey = localStorage.getItem('ahmad_api_key');
+  const finalUrl = `https://your-site.vercel.app/api/download?key=${myKey}&url=${encodeURIComponent(targetUrl)}`;
+  window.location.href = finalUrl;
+}</pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load existing key
+    window.onload = () => {
+        const savedKey = localStorage.getItem('ahmad_api_key');
+        if(savedKey) updateUI(savedKey);
+    }
+
+    function manageKey(action) {
+        if(action === 'generate') {
+            const newKey = 'AB-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem('ahmad_api_key', newKey);
+            updateUI(newKey);
+            alert("🚀 Key Generated Successfully!");
+        } else {
+            if(confirm("Bhai, key delete kar dein? Aapka access band ho jayega.")){
+                localStorage.removeItem('ahmad_api_key');
+                updateUI(null);
+            }
+        }
+    }
+
+    function updateUI(key) {
+        const input = document.getElementById('apiKeyDisplay');
+        const genBtn = document.getElementById('genBtn');
+        const delBtn = document.getElementById('delBtn');
+        const apiFormat = document.getElementById('apiFormat');
+
+        if(key) {
+            input.value = key;
+            genBtn.style.display = 'none';
+            delBtn.style.display = 'flex';
+            apiFormat.innerText = `https://ahmad-downloader.vercel.app/api/download?key=${key}&url=YOUR_LINK_HERE`;
+        } else {
+            input.value = '';
+            genBtn.style.display = 'flex';
+            delBtn.style.display = 'none';
+            apiFormat.innerText = `https://ahmad-downloader.vercel.app/api/download?key=[YOUR_KEY]&url=[LINK]`;
+        }
+    }
+
+    function copyApi() {
+        const text = document.getElementById('apiFormat').innerText;
+        navigator.clipboard.writeText(text);
+        alert("📋 API Link Copied!");
+    }
+</script>
 
 </body>
 </html>
