@@ -1,5 +1,9 @@
 {
+  "version": 2,
   "rewrites": [
-    { "source": "/api/download", "destination": "/api/download.js" }
+    {
+      "source": "/api/download",
+      "destination": "/api/download.js"
+    }
   ]
 }
